@@ -18,25 +18,31 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Install Chrome
+      - name: Install Chrome and dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install -y wget
+          # Скачиваем Chrome
           wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb  sudo apt-get install -f -y
-          rm google-chrome-stable_current_amd64.deb
+          # Устанавливаем Chrome (исправленная команда!)
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+          # Удаляем скачанный файл
+          rm -f google-chrome-stable_current_amd64.deb
+          # Проверяем установку
+          google-chrome --version
 
       - name: Start SUT
         run: |
+          # Запускаем сервер в фоне
           java -jar ./artifacts/app-card-delivery.jar &
-      
+          # Даем серверу время запуститься
           sleep 10
-        
-          curl -s http://localhost:9999  echo "Server might still be starting"
+          # Проверяем что сервер запустился
+          curl -s -f http://localhost:9999 && echo "✅ Server is responding" || echo "⚠️ Server might still be starting"
 
       - name: Build with Gradle
         run: |
-  
-          CI_OPTS="-Dselenide.headless=true"
-          CI_OPTS="$CI_OPTS -Dchromeoptions.args=--no-sandbox,--disable-dev-shm-usage,--window-size=1920x1080"
-          
-          ./gradlew test --info $CI_OPTS
+          # Добавляем CI-specific параметры
+          ./gradlew test --info \
+            -Dselenide.headless=true \
+            -Dchromeoptions.args="--no-sandbox,--disable-dev-shm-usage,--window-size=1920x1080"
