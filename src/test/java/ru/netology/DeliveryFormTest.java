@@ -10,8 +10,6 @@ import org.openqa.selenium.Keys;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -20,30 +18,13 @@ public class DeliveryFormTest {
 
    @BeforeAll
     public static void setup() {
-       // System.setProperty("selenide.holdBrowserOpen", "true");
+       System.setProperty("chromeoptions.args",
+               "--no-sandbox,--disable-dev-shm-usage,--remote-allow-origins=*");
 
-       // Определяем, что запуск в CI
-       boolean isCI = System.getenv("CI") != null
-               || System.getenv("GITHUB_ACTIONS") != null;
-
-       Configuration.browser = "chrome";
-       Configuration.browserSize = "1920x1080";
-       Configuration.headless = isCI; // В CI используем headless
-       Configuration.timeout = 10000;
-
-       // Критически важные опции для CI
-       Configuration.browserCapabilities.setCapability(
-               "goog:chromeOptions",
-               Map.of(
-                       "args", Arrays.asList(
-                               "--no-sandbox",
-                               "--disable-dev-shm-usage", // важно для ограниченной памяти
-                               "--disable-gpu",
-                               "--window-size=1920,1080",
-                               "--remote-allow-origins=*"
-                       )
-               )
-       );
+       // Включаем headless в CI
+       if (System.getenv("GITHUB_ACTIONS") != null) {
+           Configuration.headless = true;
+       }
     }
 
     @Test
