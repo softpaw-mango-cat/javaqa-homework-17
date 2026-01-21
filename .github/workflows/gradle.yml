@@ -4,26 +4,39 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get install -y wget
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb  sudo apt-get install -f -y
+          rm google-chrome-stable_current_amd64.deb
+
       - name: Start SUT
-        # Запускаем SUT,
-        # имя файла SUT будет отличаться в каждой задаче.
-        # & означает, что в фоновом режиме не блокируем терминал для запуска тестов,
-        # обязательно должен быть для запуска SUT в CI
-        run: java -jar ./artifacts/app-card-delivery.jar &
+        run: |
+          java -jar ./artifacts/app-card-delivery.jar &
+      
+          sleep 10
+        
+          curl -s http://localhost:9999  echo "Server might still be starting"
+
       - name: Build with Gradle
-        # Запускаем автотесты
-        # Для проектов на базе Selenide необходимо добавить параметр для запуска браузера
-        # в headless режиме -Dselenide.headless=true, параметр --info должен остаться
-        run: ./gradlew test --info
+        run: |
+  
+          CI_OPTS="-Dselenide.headless=true"
+          CI_OPTS="$CI_OPTS -Dchromeoptions.args=--no-sandbox,--disable-dev-shm-usage,--window-size=1920x1080"
+          
+          ./gradlew test --info $CI_OPTS
