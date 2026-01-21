@@ -15,12 +15,12 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class DeliveryFormTest {
 
-    @BeforeAll
+   /* @BeforeAll
     public static void setup() {
         System.setProperty("selenide.holdBrowserOpen", "true");
         System.setProperty("selenide.browser", "chrome");
         System.setProperty("selenide.headless", "true");
-    }
+    } */
 
     @Test
     public void shouldSendFormWithCorrectData() {
