@@ -19,7 +19,7 @@ public class DeliveryFormTest {
     public static void setup() {
         System.setProperty("selenide.holdBrowserOpen", "true");
         System.setProperty("selenide.browser", "chrome");
-        System.setProperty("selenide.headless", "false");
+        System.setProperty("selenide.headless", "true");
     }
 
     @Test
