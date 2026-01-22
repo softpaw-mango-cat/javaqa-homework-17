@@ -2,6 +2,7 @@ package ru.netology;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -57,7 +58,7 @@ public class DeliveryFormTest {
         $$("button").find((Condition.exactText("Забронировать"))).click();
 
         String expectedText = "Доставка в выбранный город недоступна";
-        $("[data-test-id='city'] .input__sub")
+        $("[data-test-id='city'].input_invalid .input__sub")
                 .shouldHave(Condition.exactText(expectedText));
 
         $("[data-test-id='notification']")
@@ -79,7 +80,7 @@ public class DeliveryFormTest {
         $$("button").find((Condition.exactText("Забронировать"))).click();
 
         String expectedText = "Заказ на выбранную дату невозможен";
-        $("[data-test-id='date'] .input__sub")
+        $("[data-test-id='date'] .input_invalid .input__sub")
                 .shouldHave(Condition.exactText(expectedText));
 
         $("[data-test-id='notification']")
@@ -101,7 +102,7 @@ public class DeliveryFormTest {
         $$("button").find((Condition.exactText("Забронировать"))).click();
 
         String expectedText = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-        $("[data-test-id='name'] .input__sub")
+        $("[data-test-id='name'].input_invalid .input__sub")
                 .shouldHave(Condition.exactText(expectedText));
 
         $("[data-test-id='notification']")
@@ -123,7 +124,7 @@ public class DeliveryFormTest {
         $$("button").find((Condition.exactText("Забронировать"))).click();
 
         String expectedText = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        $("[data-test-id='phone'] .input__sub")
+        $("[data-test-id='phone'].input_invalid .input__sub")
                 .shouldHave(Condition.exactText(expectedText));
 
         $("[data-test-id='notification']")
