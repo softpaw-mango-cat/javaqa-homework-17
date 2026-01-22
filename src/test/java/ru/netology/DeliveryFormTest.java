@@ -1,9 +1,7 @@
 package ru.netology;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -16,16 +14,12 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class DeliveryFormTest {
 
-   @BeforeAll
+    /* @BeforeAll
     public static void setup() {
-       System.setProperty("chromeoptions.args",
-               "--no-sandbox,--disable-dev-shm-usage,--remote-allow-origins=*");
-
-       // Включаем headless в CI
-       if (System.getenv("GITHUB_ACTIONS") != null) {
-           Configuration.headless = true;
-       }
-    }
+        System.setProperty("selenide.holdBrowserOpen", "true");
+        System.setProperty("selenide.browser", "chrome");
+        System.setProperty("selenide.headless", "false");
+    } */
 
     @Test
     public void shouldSendFormWithCorrectData() {
